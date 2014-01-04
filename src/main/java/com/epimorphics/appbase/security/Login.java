@@ -93,7 +93,7 @@ public class Login {
      * @throws EpiException if the request is malformed in some way.
      */
     @SuppressWarnings("rawtypes")
-    protected void processOpenID(HttpServletRequest request, HttpServletResponse response, OpenidRequest oid) {
+    static public void processOpenID(HttpServletRequest request, HttpServletResponse response, OpenidRequest oid) {
         HttpSession session = request.getSession();
         session.setAttribute(SA_REGISTRATION, oid.isRegister());
         session.setAttribute(SA_OPENID_PROVIDER, oid.getProvider());
@@ -152,7 +152,7 @@ public class Login {
      * in the original call), otherwise an EpiExpception is thrown.
      */
     @SuppressWarnings({ "unchecked" })
-    public String verifyResponse(HttpServletRequest request, HttpServletResponse httpresponse, UserStore userstore) {
+    static public String verifyResponse(HttpServletRequest request, HttpServletResponse httpresponse, UserStore userstore) {
         try {
             HttpSession session = request.getSession();
 
@@ -220,7 +220,7 @@ public class Login {
                     }
                     return session.getAttribute(SA_RETURN_URL).toString();
                 } catch (Exception e) {
-                    log.error("Authentication failure: " + e);
+                    log.error("Authentication failure", e);
                     throw new EpiException("Could not find a registration.");
                 }
             }
@@ -234,7 +234,7 @@ public class Login {
      * Login using password credentials instead of OpenID.
      * Return true if the login succeeded.
      */
-    public boolean passwordLogin(String userid, String password) {
+    static public boolean passwordLogin(String userid, String password) {
         try {
             AppRealmToken token = new AppRealmToken(userid, password);
             Subject subject = SecurityUtils.getSubject();
@@ -249,7 +249,7 @@ public class Login {
     /**
      * Logout the current user
      */ 
-    public void logout(HttpServletRequest request) throws IOException {
+    static public void logout(HttpServletRequest request) throws IOException {
         request.getSession().removeAttribute(VN_SUBJECT);
         SecurityUtils.getSubject().logout();
     }
@@ -259,7 +259,7 @@ public class Login {
      * 
      * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>
      */
-    public class OpenidRequest {
+    static public class OpenidRequest {
         String provider = DEFAULT_PROVIDER;
         String responseURL;
         String returnURL = "/";
@@ -278,7 +278,11 @@ public class Login {
          * distinct from a person-specific Google profile provider)
          */
         public void setProvider(String provider) {
-            this.provider = provider;
+            if (provider == null) {
+                this.provider = DEFAULT_PROVIDER;
+            } else {
+                this.provider = provider;
+            }
         }
 
         /**

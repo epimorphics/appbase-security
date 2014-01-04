@@ -23,6 +23,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
+import com.epimorphics.appbase.core.AppConfig;
 import com.epimorphics.util.EpiException;
 
 public class AppRealm extends AuthorizingRealm {
@@ -38,6 +39,13 @@ public class AppRealm extends AuthorizingRealm {
         hashing.setHashAlgorithmName( DEFAULT_ALGORITHM );
         hashing.setHashIterations( DEFAULT_ITERATIONS );
         hashService = hashing;
+    }
+
+    /**
+     * Configure a user store by looking up its name in the set of configured components
+     */
+    public void setDiscoverUserStore(String storename) {
+        setUserStore( AppConfig.getApp().getComponentAs(storename, UserStore.class) );
     }
     
     /**
