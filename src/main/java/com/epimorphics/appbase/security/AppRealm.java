@@ -59,7 +59,7 @@ public class AppRealm extends AuthorizingRealm {
     /**
      * Return the path part of a action:path permission structure
      */
-    static String permissionPath(String permission) {
+    static public String permissionPath(String permission) {
         String [] parts = permission.split(":");
         if (parts != null && parts.length == 2) {
             return parts[1];
@@ -71,7 +71,7 @@ public class AppRealm extends AuthorizingRealm {
     /**
      * Return the action part of a action:path permission structure
      */
-    static String permissionAction(String permission) {
+    static public String permissionAction(String permission) {
         String [] parts = permission.split(":");
         if (parts != null && parts.length == 2) {
             return parts[0];
