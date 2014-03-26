@@ -321,8 +321,17 @@ public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
     public void shutdown() {
         try {
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
-        } catch (SQLException e) {
-            log.error("Problem shutting down", e);
+        } catch (SQLException se) {
+            if (( (se.getErrorCode() == 50000)
+                    && ("XJ015".equals(se.getSQLState()) ))) {
+                // we got the expected exception
+                log.info("User database shut down normally");
+            } else {
+                log.error(String.format("Failed to shut down user database cleanly - %s (err=%d, state=%s)", 
+                        se.getMessage(), se.getErrorCode(), se.getSQLState()), se);
+            }
+        } catch (Exception e) {
+            log.error("Problem shutting down user database - " + e, e);
         }
     }
 

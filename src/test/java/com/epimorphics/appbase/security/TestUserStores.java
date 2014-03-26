@@ -74,6 +74,7 @@ public class TestUserStores {
         doCredentialsTest(store);
         doPermissionsTest(store);
         doStoreSearchTest(store);
+        store.shutdown();
     }
     
     static protected void doCredentialsTest(BaseUserStore store) {
