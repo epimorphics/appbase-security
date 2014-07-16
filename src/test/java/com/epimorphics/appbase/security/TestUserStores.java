@@ -9,10 +9,7 @@
 
 package com.epimorphics.appbase.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Set;
@@ -76,6 +73,20 @@ public class TestUserStores {
         doStoreSearchTest(store);
         store.shutdown();
     }
+    
+    // Experimental test
+//    @Test
+//    public void testMultiLevelPermissions() {
+//        DBUserStore store = new DBUserStore();
+//        store.setDbfile("memory:test");
+//        store.setInitfile("test/user.ini");
+//        AppRealm realm = new AppRealm();
+//        realm.setUserStore(store);
+//
+//        store.addPermision(ALICE_ID, "domain:update:foo");
+//        assertTrue( store.getPermissions(ALICE_ID).contains("domain:update:foo") );
+//        store.shutdown();
+//    }
     
     static protected void doCredentialsTest(BaseUserStore store) {
         SaltedAuthenticationInfo info = store.checkUser(ALICE_ID);
