@@ -122,4 +122,12 @@ public class AppRealm extends AuthorizingRealm {
         ai.setStringPermissions( userstore.getPermissions(user.getOpenid()) );
         return ai;
     }
+
+    // Override implementation so that key used for tokens (openid URI) is also
+    // used for princpals (UserInfo)
+    @Override
+    protected Object getAuthenticationCacheKey(PrincipalCollection pc) {
+        return ((UserInfo)pc.getPrimaryPrincipal()).getOpenid();
+    }
+    
 }
