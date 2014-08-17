@@ -9,6 +9,9 @@
 
 package com.epimorphics.appbase.security;
 
+import java.util.Collection;
+
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -19,7 +22,9 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.HashService;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
@@ -31,6 +36,17 @@ public class AppRealm extends AuthorizingRealm {
 
     protected HashService hashService;
     protected UserStore userstore;
+    
+    public static AppRealm getRealm() {
+        Collection<Realm> realms = ((RealmSecurityManager) SecurityUtils.getSecurityManager()).getRealms();
+        for (Realm realm : realms) {
+            if (realm instanceof AppRealm) {
+                return (AppRealm)realm;
+            }
+        }
+        return null;
+    }
+    
     
     public AppRealm() {
         setCredentialsMatcher( new AppRealmCredentialsMatcher() );

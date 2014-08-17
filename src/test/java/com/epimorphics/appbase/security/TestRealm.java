@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
@@ -29,7 +28,7 @@ public class TestRealm {
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("file:test/shiro.ini");
         SecurityManager securityManager = factory.getInstance();
         SecurityUtils.setSecurityManager(securityManager);
-        AppRealm realm = (AppRealm) ((RealmSecurityManager) securityManager).getRealms().iterator().next();
+        AppRealm realm = AppRealm.getRealm();
 
         Subject subject = SecurityUtils.getSubject();
         subject.login( new AppRealmToken(TestUserStores.BOB_ID, true) );
