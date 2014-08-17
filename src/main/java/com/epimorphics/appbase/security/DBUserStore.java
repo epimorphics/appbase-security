@@ -195,7 +195,7 @@ public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
 
     @Override
     public void doAddPermision(String id, String permission) {
-        String[] parts = permission.split(":");
+        String[] parts = AppRealm.splitPermission(permission);
         String paction = parts[0];
         String ppath = parts[1];
         try {

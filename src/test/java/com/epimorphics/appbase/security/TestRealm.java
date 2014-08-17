@@ -36,6 +36,13 @@ public class TestRealm {
         assertTrue( subject.isPermitted("Write:project3") );
         assertFalse( subject.isPermitted("Write:project1") );
         
+        assertTrue( subject.isPermitted("Action:project1:component1") );
+        assertTrue( subject.isPermitted("Action:project1:component2") );
+        assertTrue( subject.isPermitted("Action:project1:component3") );
+        assertTrue( subject.isPermitted("Action:project3:component1") );
+        assertTrue( subject.isPermitted("Action:project4:component3") );
+        assertFalse( subject.isPermitted("Action:project4:component1") );
+        
         subject.logout();
         SecurityUtils.setSecurityManager(null);
     }

@@ -24,7 +24,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import com.epimorphics.appbase.core.AppConfig;
-import com.epimorphics.util.EpiException;
 
 public class AppRealm extends AuthorizingRealm {
     public static final String DEFAULT_ALGORITHM = "SHA-512";
@@ -68,26 +67,35 @@ public class AppRealm extends AuthorizingRealm {
      * Return the path part of a action:path permission structure
      */
     static public String permissionPath(String permission) {
-        String [] parts = permission.split(":");
-        if (parts != null && parts.length == 2) {
-            return parts[1];
-        } else {
-            throw new EpiException("Badly formatted permission expected {action}:{path}");
-        }
+        return splitPermission(permission)[1];
     }
     
     /**
      * Return the action part of a action:path permission structure
      */
     static public String permissionAction(String permission) {
-        String [] parts = permission.split(":");
-        if (parts != null && parts.length == 2) {
-            return parts[0];
-        } else {
-            throw new EpiException("Badly formatted permission expected {action}:{path}");
-        }
+        return splitPermission(permission)[0];
     }
 
+    /**
+     * The string permission structure allows standard Shiro wildcard structures foo:bar:baz...
+     * However, the user store is optimized for a structure action:path where you can add or remove
+     * all actions related to a path. This allows for other permission resolvers (e.g. the
+     * hierarchical paths supported by the registry). To cater for the mismatch we simply
+     * split the first segment of the wildcard to treat as an action and treat the rest
+     * as the path. 
+     */
+    static public String[] splitPermission(String permission) {
+        int split = permission.indexOf(":");
+        if (split == -1) {
+            return new String[]{permission, ""};
+        } else {
+            return new String[]{
+                    permission.substring(0, split),
+                    permission.substring(split+1) };
+        }
+    }
+    
     public HashService getHashService() {
         return hashService;
     }

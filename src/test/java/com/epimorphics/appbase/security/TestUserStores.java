@@ -75,18 +75,18 @@ public class TestUserStores {
     }
     
     // Experimental test
-//    @Test
-//    public void testMultiLevelPermissions() {
-//        DBUserStore store = new DBUserStore();
-//        store.setDbfile("memory:test");
-//        store.setInitfile("test/user.ini");
-//        AppRealm realm = new AppRealm();
-//        realm.setUserStore(store);
-//
-//        store.addPermision(ALICE_ID, "domain:update:foo");
-//        assertTrue( store.getPermissions(ALICE_ID).contains("domain:update:foo") );
-//        store.shutdown();
-//    }
+    @Test
+    public void testMultiLevelPermissions() {
+        DBUserStore store = new DBUserStore();
+        store.setDbfile("memory:test");
+        store.setInitfile("test/user2.ini");
+        AppRealm realm = new AppRealm();
+        realm.setUserStore(store);
+
+        store.addPermision(ALICE_ID, "domain:update:foo");
+        assertTrue( store.getPermissions(ALICE_ID).contains("domain:update:foo") );
+        store.shutdown();
+    }
     
     static protected void doCredentialsTest(BaseUserStore store) {
         SaltedAuthenticationInfo info = store.checkUser(ALICE_ID);

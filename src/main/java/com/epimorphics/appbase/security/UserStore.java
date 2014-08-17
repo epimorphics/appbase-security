@@ -103,11 +103,13 @@ public interface UserStore {
 
     /**
      * Remove permissions from this user for the given path.
+     * Only relevant in applications that use action:path structure.
      */
     public void removePermission(String id, String target);
 
     /**
      * Return the set of users who have some explicit permission over the given path
+     * Only relevant in applications that use action:path structure.
      */
     public List<UserPermission> authorizedOn(String target);
 
