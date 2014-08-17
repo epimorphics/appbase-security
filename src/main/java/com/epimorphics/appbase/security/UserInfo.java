@@ -32,21 +32,21 @@ import java.io.Serializable;
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = -4661235310974850596L;
 
-    protected String openid;
+    protected String id;
     protected String name;
 
-    public UserInfo(String openid, String name) {
-        this.openid = openid;
+    public UserInfo(String id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     /** The user's openID identifier URI */
-    public String getOpenid() {
-        return openid;
+    public String getId() {
+        return id;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /** A human readable name for user, or a local alias */
@@ -61,19 +61,19 @@ public class UserInfo implements Serializable {
     @Override
     public boolean equals(Object other) {
         if (other instanceof UserInfo) {
-            return openid.equals( ((UserInfo)other).openid );
+            return id.equals( ((UserInfo)other).id );
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return openid.hashCode();
+        return id.hashCode();
     }
 
     @Override
     public String toString() {
-        return String.format("User[%s,%s]", name, openid);
+        return String.format("User[%s,%s]", name, id);
     }
 
 }

@@ -57,10 +57,10 @@ public class MemUserStore extends BaseUserStore implements UserStore {
 
     @Override
     public boolean doRegister(UserInfo user) {
-        if (users.containsKey(user.getOpenid())) {
+        if (users.containsKey(user.getId())) {
             return false;
         }
-        UserRecord record = new UserRecord(user.getOpenid(), user.getName());
+        UserRecord record = new UserRecord(user.getId(), user.getName());
         record.initSalt();
         users.put(record.id, record);
         return true;

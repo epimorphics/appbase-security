@@ -85,6 +85,7 @@ public class TestUserStores {
 
         store.addPermision(ALICE_ID, "domain:update:foo");
         assertTrue( store.getPermissions(ALICE_ID).contains("domain:update:foo") );
+        
         store.shutdown();
     }
     
@@ -124,15 +125,15 @@ public class TestUserStores {
         List<UserPermission> perms = store.authorizedOn("project2");
         assertEquals(2, perms.size());
         UserPermission p = perms.get(0);
-        assertEquals (p.getUser().getOpenid().equals(ALICE_ID) ? "Write" : "Read", p.getPermissions());
+        assertEquals (p.getUser().getId().equals(ALICE_ID) ? "Write" : "Read", p.getPermissions());
         p = perms.get(1);
-        assertEquals (p.getUser().getOpenid().equals(ALICE_ID) ? "Write" : "Read", p.getPermissions());
+        assertEquals (p.getUser().getId().equals(ALICE_ID) ? "Write" : "Read", p.getPermissions());
         
         store.removePermission(BOB_ID, "*");
         perms = store.authorizedOn("project2");
         assertEquals(1, perms.size());
         p = perms.get(0);
-        assertEquals (ALICE_ID, p.getUser().getOpenid());
+        assertEquals (ALICE_ID, p.getUser().getId());
         assertEquals ("Write", p.getPermissions());
     }
     

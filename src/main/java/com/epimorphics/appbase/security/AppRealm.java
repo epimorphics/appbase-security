@@ -27,7 +27,7 @@ import com.epimorphics.appbase.core.AppConfig;
 
 public class AppRealm extends AuthorizingRealm {
     public static final String DEFAULT_ALGORITHM = "SHA-512";
-    public static final int    DEFAULT_ITERATIONS = 1;
+    public static final int    DEFAULT_ITERATIONS = 100000;
 
     protected HashService hashService;
     protected UserStore userstore;
@@ -42,10 +42,11 @@ public class AppRealm extends AuthorizingRealm {
 
     /**
      * Set the number of iterations that the hash service should use.
-     * Default is 1. See to high numbers (e.g. 10^5 or more) to increase cost of brute force attack
+     * Must be set before any new credentials (including bootstrap ones) are hashed.
      */
     public void setHashIterations(int iterations) {
         ((DefaultHashService) hashService).setHashIterations(iterations);
+        ((AppRealmCredentialsMatcher)getCredentialsMatcher()).setHashIterations(iterations);
     }
 
     /**
@@ -61,6 +62,10 @@ public class AppRealm extends AuthorizingRealm {
     public void setUserStore(UserStore store) {
         userstore = store;
         store.setRealm(this);
+    }
+    
+    public UserStore getUserStore() {
+        return userstore;
     }
     
     /**
@@ -135,7 +140,7 @@ public class AppRealm extends AuthorizingRealm {
             PrincipalCollection principals) {
         UserInfo user = (UserInfo)principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo ai = new SimpleAuthorizationInfo();
-        ai.setStringPermissions( userstore.getPermissions(user.getOpenid()) );
+        ai.setStringPermissions( userstore.getPermissions(user.getId()) );
         return ai;
     }
 
@@ -143,7 +148,7 @@ public class AppRealm extends AuthorizingRealm {
     // used for princpals (UserInfo)
     @Override
     protected Object getAuthenticationCacheKey(PrincipalCollection pc) {
-        return ((UserInfo)pc.getPrimaryPrincipal()).getOpenid();
+        return ((UserInfo)pc.getPrimaryPrincipal()).getId();
     }
     
 }

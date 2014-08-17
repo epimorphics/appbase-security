@@ -118,11 +118,11 @@ public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
 
     @Override
     public boolean doRegister(UserInfo user) {
-        if (getRecord(user.getOpenid()) != null) {
+        if (getRecord(user.getId()) != null) {
             return false;
         }
         try {
-            UserRecord record = new UserRecord(user.getOpenid(), user.getName());
+            UserRecord record = new UserRecord(user.getId(), user.getName());
             record.initSalt();
             PreparedStatement ps = conn.prepareStatement("INSERT INTO USERS VALUES (?, ?, ?, ?, ?, ?)");
             ps.setString(1, record.id);

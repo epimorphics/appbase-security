@@ -138,9 +138,9 @@ public abstract class BaseUserStore extends ComponentBase implements UserStore {
     public boolean register(UserInfo user) {
         boolean success = doRegister(user);
         if (success) {
-            log("Registered user " + user.getOpenid() + " (" + user.getName() + ")");
+            log("Registered user " + user.getId() + " (" + user.getName() + ")");
         }
-        clearCache(user.getOpenid());
+        clearCache(user.getId());
         return success;
     }
     public abstract boolean doRegister(UserInfo user);
