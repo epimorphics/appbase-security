@@ -42,6 +42,14 @@ public class AppRealm extends AuthorizingRealm {
     }
 
     /**
+     * Set the number of iterations that the hash service should use.
+     * Default is 1. See to high numbers (e.g. 10^5 or more) to increase cost of brute force attack
+     */
+    public void setHashIterations(int iterations) {
+        ((DefaultHashService) hashService).setHashIterations(iterations);
+    }
+
+    /**
      * Configure a user store by looking up its name in the set of configured components
      */
     public void setDiscoverUserStore(String storename) {
