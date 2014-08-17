@@ -52,9 +52,10 @@ public class Login {
      * Login using password credentials instead of OpenID.
      * Return true if the login succeeded.
      */
-    static public boolean passwordLogin(String userid, String password) {
+    static public boolean passwordLogin(String userid, String password, boolean rememberMe) {
         try {
             AppRealmToken token = new AppRealmToken(userid, password);
+            token.setRememberMe(rememberMe);
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
             return true;
