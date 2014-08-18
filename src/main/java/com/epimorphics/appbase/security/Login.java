@@ -23,8 +23,6 @@ package com.epimorphics.appbase.security;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
@@ -42,9 +40,6 @@ import com.epimorphics.util.EpiException;
 public class Login {
     static final Logger log = LoggerFactory.getLogger( Login.class );
 
-    // Velocity binding names
-    public static final String VN_SUBJECT = "subject";
-    
     // Action permission required to reset someones password
     public static final String ADMIN_ACTION = "Admin";
 
@@ -110,8 +105,7 @@ public class Login {
     /**
      * Logout the current user
      */ 
-    static public void logout(HttpServletRequest request) throws IOException {
-        request.getSession().removeAttribute(VN_SUBJECT);
+    static public void logout() throws IOException {
         SecurityUtils.getSubject().logout();
     }
 

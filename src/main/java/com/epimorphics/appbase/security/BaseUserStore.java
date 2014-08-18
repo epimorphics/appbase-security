@@ -63,7 +63,13 @@ public abstract class BaseUserStore extends ComponentBase implements UserStore {
     @Override
     public void setRealm(AppRealm realm) {
         this.realm = realm;
-        initstore();
+        // Can only initialize the store once we know the realm
+        checkStore();
+    }
+
+    private void checkStore() {
+        if ( !initstore() ) return;
+        if (initfile == null) return;
         loadStore();
     }
     
