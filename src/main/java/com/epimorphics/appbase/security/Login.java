@@ -111,6 +111,7 @@ public class Login {
         if (userstore.register( userinfo )) {
                 userstore.setCredentials(userid, ByteSource.Util.bytes(password), Integer.MAX_VALUE);
         } else {
+            log.warn(String.format("User %s tried to register an already registered user, %s", SecurityUtils.getSubject().getPrincipal(), userid));
             throw new EpiException( "That username is already registered" );
         }
     }

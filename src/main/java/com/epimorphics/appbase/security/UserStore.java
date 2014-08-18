@@ -102,10 +102,15 @@ public interface UserStore {
     public void addPermision(String id, String permission);
 
     /**
+     * Remove the specific matching permission for this user
+     */
+    public void removePermission(String id, String permission);
+
+    /**
      * Remove permissions from this user for the given path.
      * Only relevant in applications that use action:path structure.
      */
-    public void removePermission(String id, String target);
+    public void removePermissionsOn(String id, String target);
 
     /**
      * Return the set of users who have some explicit permission over the given path

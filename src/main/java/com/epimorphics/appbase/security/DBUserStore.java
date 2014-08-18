@@ -212,11 +212,29 @@ public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
     }
 
     @Override
-    public void doRemovePermission(String id, String path) {
+    public void doRemovePermissionsOn(String id, String path) {
         try {
             PreparedStatement s = conn.prepareStatement("DELETE FROM PERMISSIONS WHERE ID=? AND PATH=?");
             s.setString(1, id);
             s.setString(2, path);
+            s.executeUpdate();
+            commit();
+        } catch (Exception e) {
+            log.error("Failed to access security database", e);
+            throw new EpiException(e);
+        }
+    }
+
+    @Override
+    public void doRemovePermission(String id, String permission) {
+        String[] parts = AppRealm.splitPermission(permission);
+        String paction = parts[0];
+        String ppath = parts[1];
+        try {
+            PreparedStatement s = conn.prepareStatement("DELETE FROM PERMISSIONS WHERE ID=? AND ACTION=? AND PATH=?");
+            s.setString(1, id);
+            s.setString(2, paction);
+            s.setString(3, ppath);
             s.executeUpdate();
             commit();
         } catch (Exception e) {

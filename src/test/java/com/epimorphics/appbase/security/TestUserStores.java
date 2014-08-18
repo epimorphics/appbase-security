@@ -129,12 +129,17 @@ public class TestUserStores {
         p = perms.get(1);
         assertEquals (p.getUser().getId().equals(ALICE_ID) ? "Write" : "Read", p.getPermissions());
         
-        store.removePermission(BOB_ID, "*");
+        store.removePermissionsOn(BOB_ID, "*");
         perms = store.authorizedOn("project2");
         assertEquals(1, perms.size());
         p = perms.get(0);
         assertEquals (ALICE_ID, p.getUser().getId());
         assertEquals ("Write", p.getPermissions());
+        
+        store.removePermission(ALICE_ID, "Write:project2");
+        permissions = store.getPermissions(ALICE_ID);
+        assertTrue(permissions.contains("Read:project1"));
+        assertFalse(permissions.contains("Write:project2"));
     }
     
     static protected void doStoreSearchTest(UserStore store) {

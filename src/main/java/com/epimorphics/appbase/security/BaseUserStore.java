@@ -185,13 +185,22 @@ public abstract class BaseUserStore extends ComponentBase implements UserStore {
     public abstract void doAddPermision(String id, String permission);
 
     @Override
-    public void removePermission(String id, String path) {
+    public void removePermissionsOn(String id, String path) {
         checkSubjectControls(path);
-        doRemovePermission(id, path);
+        doRemovePermissionsOn(id, path);
         clearCache(id);
         log("Removed permissions for user " + id + " on path " + path);
     }
-    public abstract void doRemovePermission(String id, String path);
+    public abstract void doRemovePermissionsOn(String id, String path);
+
+    @Override
+    public void removePermission(String id, String permission) {
+        checkSubjectControls( AppRealm.permissionPath(permission) ); 
+        doRemovePermission(id, permission);
+        clearCache(id);
+        log("Removed permission " + permission + " for user " + id);
+    }
+    public abstract void doRemovePermission(String id, String permission);
 
     private void loadStore() {
         if (initfile == null)  {

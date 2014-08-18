@@ -96,7 +96,7 @@ public class MemUserStore extends BaseUserStore implements UserStore {
     }
 
     @Override
-    public void doRemovePermission(String id, String path) {
+    public void doRemovePermissionsOn(String id, String path) {
         Set<String> perms = permissions.get(id);
         List<String> toRemove = new ArrayList<String>();
         for (String p : perms) {
@@ -149,6 +149,14 @@ public class MemUserStore extends BaseUserStore implements UserStore {
             }
         }
         return matches;
+    }
+
+    @Override
+    public void doRemovePermission(String id, String permission) {
+        Set<String> perms = permissions.get(id);
+        if (perms != null) {
+            perms.remove(permission);
+        }
     }
 
 }
