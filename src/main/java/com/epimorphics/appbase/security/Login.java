@@ -102,6 +102,20 @@ public class Login {
         }
     }
     
+    static public void registerUser(AppRealm realm, String userid, String password, String name) { 
+        if (userid == null || userid.isEmpty() || password == null || password.isEmpty() || name == null || name.isEmpty()) {
+            throw new EpiException( "You must supply all of a username, display name and password to register" );
+        }
+        UserStore userstore = realm.getUserStore();
+        UserInfo userinfo = new UserInfo(userid, name);
+        if (userstore.register( userinfo )) {
+                userstore.setCredentials(userid, ByteSource.Util.bytes(password), Integer.MAX_VALUE);
+        } else {
+            throw new EpiException( "That username is already registered" );
+        }
+    }
+
+    
     /**
      * Logout the current user
      */ 
