@@ -95,6 +95,11 @@ public abstract class BaseUserStore extends ComponentBase implements UserStore {
     protected abstract UserRecord getRecord(String id);
 
     @Override
+    public UserInfo getuser(String id) {
+        return new UserInfo(id, getRecord(id).getName());
+    }
+    
+    @Override
     public SaltedAuthenticationInfo checkUser(String id) {
         UserRecord record = getRecord(id);
         if (record == null) {
@@ -277,7 +282,15 @@ class UserRecord {
             return null;
         }
     }
+    
+    public String getName() {
+        return name;
+    }
 
+    public String getID() {
+        return id;
+    }
+    
     public ByteSource getSalt() {
         return ByteSource.Util.bytes( Hex.decode(salt) );
     }
