@@ -56,6 +56,14 @@ public class AppRealmToken extends UsernamePasswordToken implements Authenticati
         verified = false;
     }
 
+    /**
+     * Construct a token with password-style credentials
+     */
+    public AppRealmToken(String id, char[] password) {
+        super(id, password);
+        verified = false;
+    }
+
     public boolean isVerified() {
         return verified;
     }

@@ -17,6 +17,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
@@ -143,7 +144,12 @@ public class AppRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken token) throws AuthenticationException {
         if (!(token instanceof AppRealmToken)) {
-            throw new IncorrectCredentialsException();
+            if (token instanceof UsernamePasswordToken) {
+                UsernamePasswordToken otoken = (UsernamePasswordToken)token;
+                token = new AppRealmToken(otoken.getUsername(), otoken.getPassword());
+            } else {
+                throw new IncorrectCredentialsException();
+            }
         }
         AppRealmToken rtoken = (AppRealmToken)token;
         String id = (String)rtoken.getPrincipal();
