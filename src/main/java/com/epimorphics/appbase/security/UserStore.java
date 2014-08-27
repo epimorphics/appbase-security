@@ -126,6 +126,6 @@ public interface UserStore {
     /**
      * Return the user info for the given user ID, or null if not found
      */
-    public UserInfo getuser(String id);
+    public UserInfo getUser(String id);
 
 }

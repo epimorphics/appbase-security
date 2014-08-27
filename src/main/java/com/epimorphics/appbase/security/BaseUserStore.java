@@ -95,7 +95,7 @@ public abstract class BaseUserStore extends ComponentBase implements UserStore {
     protected abstract UserRecord getRecord(String id);
 
     @Override
-    public UserInfo getuser(String id) {
+    public UserInfo getUser(String id) {
         UserRecord record = getRecord(id);
         if (record == null) {
             return null;
