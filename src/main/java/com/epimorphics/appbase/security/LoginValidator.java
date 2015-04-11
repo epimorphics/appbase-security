@@ -21,7 +21,7 @@ import static java.lang.Character.*;
  */
 public class LoginValidator extends ComponentBase {
     protected long retriesAllowed = 3;
-    protected long retriesDelay = 10 * 60 * 1000;
+    protected long retriesDelay = 10;
     protected long passwordCharGroups = 3;
     protected long passwordLength = 8;
 
@@ -81,7 +81,7 @@ public class LoginValidator extends ComponentBase {
         if (nclasses < passwordCharGroups) {
             return false;
         }
-        return false;
+        return true;
     }
     
     public void setRetriesAllowed(long retriesAllowed) {
@@ -110,7 +110,7 @@ public class LoginValidator extends ComponentBase {
         
         public boolean tryAllowed() {
             if (timeout > 0) {
-                if (timeout < System.currentTimeMillis()) {
+                if (timeout > System.currentTimeMillis()) {
                     // Currently locked
                     return false;
                 } else {
@@ -123,7 +123,7 @@ public class LoginValidator extends ComponentBase {
                 retryCount ++;
                 if (retryCount > retriesAllowed) {
                     // Too many tries, set lock
-                    timeout = System.currentTimeMillis() + retriesDelay;
+                    timeout = System.currentTimeMillis() + retriesDelay*60*1000;
                     return false;
                 }
             }
