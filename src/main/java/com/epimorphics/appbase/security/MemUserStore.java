@@ -22,6 +22,8 @@
 package com.epimorphics.appbase.security;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -148,6 +150,12 @@ public class MemUserStore extends BaseUserStore implements UserStore {
                 matches.add( new UserInfo(record.id, record.name) );
             }
         }
+        Collections.sort(matches, new Comparator<UserInfo>(){
+
+            @Override
+            public int compare(UserInfo arg0, UserInfo arg1) {
+                return arg0.getName().compareTo(arg1.getName());
+            }});
         return matches;
     }
 
