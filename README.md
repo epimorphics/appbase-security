@@ -43,7 +43,7 @@ Set a listener to startup the shiro environment on webapp start up. Put this aft
 
 ### Shiro configuration
 
-Typical Shiro configuration goes in WEB-INF/shiro.ini
+Minimal Shiro configuration goes in WEB-INF/shiro.ini
 
     # =======================
     # Shiro INI configuration
@@ -58,13 +58,40 @@ Typical Shiro configuration goes in WEB-INF/shiro.ini
     securityManager.realms = $realm
     
     [users]
-    [roles]    
+    [roles]  
     [urls]
-    # The 'urls' section is used for url-based securityin web applications. 
 
 This configures the appbase Realm and attaches a user credentials store which is found as the appbase component called "userstore".
 
 The [users] and [roles] sections aren't used.
+
+For a web application then you can control authentication here, for example:
+
+
+    # =======================
+    # Shiro INI configuration
+    # =======================
+    
+    [main]
+    cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+    securityManager.cacheManager = $cacheManager
+    realm = com.epimorphics.appbase.security.AppRealm
+    realm.discoverUserStore = userstore
+    realm.authenticationCachingEnabled = true
+    securityManager.realms = $realm
+
+    passAuth = org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter
+    passAuth.loginUrl = /view/login-page
+
+    [users]
+    [roles]  
+
+    [urls]
+    /view/login-page = anon
+    /view/** = passAuth
+    /api/** = passAuth
+    /system/security/login = anon
+    /system/** = passAuth
 
 ### User store configuration
 
@@ -98,12 +125,13 @@ User registration entries start with the user keyword and take the form:
     
 or    
 
-    user  openid  "name"   password
+    user  id  "name"   password
     
 For example:
 
     user https://profiles.google.com/1147194443288764760228 "Alice"
-    
+    user dave@epimorphics.com "Dave Reynolds" shouldbechanged
+
 An OpenID profile for anyone with a Google account can be obtained from their profile or Google-plus home page and copying the long number from there into the above URL pattern. A general Google login generates an OpenID which depends on the requesting web site as well as the user. To determine the ID in that case start the bootstrap registry, register the target user and note the resulting OpenID, then shutdown the registry and modify the initialization file accordingly.
 
 There is a built in anonymous user with pseudo OpenID of http://localhost/anon. It is convenient to declare that user in the initialization file as well, so as to bind a visible name to that id. For example:
@@ -112,7 +140,7 @@ There is a built in anonymous user with pseudo OpenID of http://localhost/anon. 
     
 The second type of declaration line is used to grant permissions to a user. These take the form:
 
-    openid permission
+    id permission
     
 Where the *permission* takes the form:
 
@@ -124,6 +152,77 @@ For example:
 
     http://localhost/anon Read:*
     
+## Password login and registration
+
+Provide a set of API endpoints for login, logout and any requried user management. For example:
+
+    @Path("login")
+    @POST
+    public Response login(
+            @FormParam("userid") String userid,
+            @FormParam("password") String password,
+            @FormParam("rememberMe") boolean rememberMe,
+            @FormParam("redirectURL") String redirectURL) {
+        if (Login.passwordLogin(userid, password, rememberMe)) {
+            log.info("User " + userid + " logged in");
+            if (validator != null) {
+                validator.successfulLogin(userid);
+            }
+            return redirectTo(redirectURL);
+        } else {
+            return redirectToView("login-page?error=Login+credentials+failed");
+        }
+    }
+    
+    @Path("logout")
+    @POST
+    public Response logout() {
+        Subject subject = SecurityUtils.getSubject();
+        log.info("User " + subject.getPrincipal() + " logged out");
+        subject.logout();
+        return redirectToView("index");
+    }
+
+## Security violations
+
+To check permissions in API endpoints use the Shiro utilities. A convenient pattern is the throw an exception if a security restriction is violated and then use a mapper to catch the exception and render a message.
+
+For example, to perform the checks you might use something like:
+
+    public void checkAllowed(String permission) {
+        Subject subject = SecurityUtils.getSubject();
+        if ( ! subject.isPermitted(permission) ) {
+            throw new SecurityViolationException(permission, (UserInfo) subject.getPrincipal());
+        }
+    }
+
+Then somewhere visible to Jersey declare a mapper:
+
+```java
+@Provider
+public class SecurityViolationMapper  implements
+        ExceptionMapper<SecurityViolationException> {
+    static final Logger log = LoggerFactory.getLogger( SecurityViolationMapper.class );
+
+    @Override
+    public Response toResponse(SecurityViolationException exception) {
+        String permission = exception.getPermission();
+        log.warn( String.format("User %s blocked attempting action requiring permission %s", 
+                exception.getUser(), permission) );
+        
+        String message = "You do not have permission to " + permission;
+        String location = PubUtil.get().getViewBase() + "/error?message=" + NameUtils.encodeSafeName(message);
+        try {
+            URI locationURI = new URI(location);
+            return Response.seeOther(locationURI).build();
+        } catch (URISyntaxException e) {
+            log.error("Internal error reporting security violation", e);
+            return null;
+        }
+    }
+}
+```
+
 ## OpenID, login and registration
 
 The Login class provides a set of convenience methods to enable user registration and login via OpenID, login via password credentials and logout.

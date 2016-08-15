@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epimorphics.appbase.core.Shutdown;
 import com.epimorphics.util.EpiException;
-import com.hp.hpl.jena.util.FileManager;
+import org.apache.jena.util.FileManager;
 
 public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
     static final Logger log = LoggerFactory.getLogger( DBUserStore.class );
