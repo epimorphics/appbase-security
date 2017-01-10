@@ -264,87 +264,99 @@ To use this you need to provide a set of URL endpoints which invoke the various 
 and handle OpenID response processing. The easy way to do this via Jersey. For example:
 
 ```java
-    @Path("/system/security")
-    public class LoginCmds {
-        protected @Context UriInfo uriInfo;
-        protected @Context ServletContext context;
+@Path("/system/security")
+public class LoginCmds {
+    protected @Context UriInfo uriInfo;
+    protected @Context ServletContext context;
 
-        // request OpenID login for a registered user
-        @Path("/login")
-        @POST
-        public Response login(
-                @FormParam("provider") String provider,
-                @FormParam("return") String returnURL,
-                @Context HttpServletRequest request,
-                @Context HttpServletResponse response) {
-            OpenidRequest oid = new OpenidRequest(uriInfo.getBaseUri().toString() + "system/security/response");
-            oid.setProvider(provider);
-            oid.setReturnURL(returnURL);
-            try {
-                processOpenID(request, response, oid);
-            }  catch (Exception e) {
-                throw new WebApiException(Status.BAD_REQUEST, "Login/registration action failed: " + e);
-            }
-            return Response.ok().build();
+    // request OpenID login for a registered user
+    @Path("/login")
+    @POST
+    public Response login(
+            @FormParam("provider") String provider,
+            @FormParam("return") String returnURL,
+            @Context HttpServletRequest request,
+            @Context HttpServletResponse response) {
+        OpenidRequest oid = new OpenidRequest(uriInfo.getBaseUri().toString() + 
+                                              "system/security/response");
+        oid.setProvider(provider);
+        oid.setReturnURL(returnURL);
+        try {
+            processOpenID(request, response, oid);
+        }  catch (Exception e) {
+            throw new WebApiException(Status.BAD_REQUEST, 
+                                      "Login/registration action failed: " + e);
         }
+        return Response.ok().build();
+    }
 
-        // Register a new user via OpenID
-        @Path("/register")
-        @POST
-        public Response register(
-                @FormParam("provider") String provider,
-                @FormParam("return") String returnURL,
-                @Context HttpServletRequest request,
-                @Context HttpServletResponse response) {
-            OpenidRequest oid = new OpenidRequest(uriInfo.getBaseUri().toString() + "system/security/response");
-            oid.setProvider(provider);
-            oid.setReturnURL(returnURL);
-            oid.setRegister(true);
-            try {
-                processOpenID(request, response, oid);
-            }  catch (Exception e) {
-                throw new WebApiException(Status.BAD_REQUEST, "Login/registration action failed: " + e);
-            }
-            return Response.ok().build();
+    // Register a new user via OpenID
+    @Path("/register")
+    @POST
+    public Response register(
+            @FormParam("provider") String provider,
+            @FormParam("return") String returnURL,
+            @Context HttpServletRequest request,
+            @Context HttpServletResponse response) {
+        OpenidRequest oid = new OpenidRequest(uriInfo.getBaseUri().toString() + 
+                                              "system/security/response");
+        oid.setProvider(provider);
+        oid.setReturnURL(returnURL);
+        oid.setRegister(true);
+        try {
+            processOpenID(request, response, oid);
+        }  catch (Exception e) {
+            throw new WebApiException(Status.BAD_REQUEST, 
+                                      "Login/registration action failed: " + e);
         }
+        return Response.ok().build();
+    }
 
-        // Logout the current loged in user
-        @Path("/logout")
-        @POST
-        public void doLogout(@Context HttpServletRequest request, @Context HttpServletResponse response) throws IOException {
-            logout(request);
-            response.sendRedirect(request.getServletContext().getContextPath());
-        }
+    // Logout the current loged in user
+    @Path("/logout")
+    @POST
+    public void doLogout(@Context HttpServletRequest request, 
+                         @Context HttpServletResponse response) throws IOException {
+        logout(request);
+        response.sendRedirect(request.getServletContext().getContextPath());
+    }
 
-        // Internal endpoint use in the OpenID handshake
-        @Path("/response")
-        @GET
-        public Response openIDResponse(@Context HttpServletRequest request, @Context HttpServletResponse response) {
-            try {
-                UserStore userstore = AppConfig.getApp().getComponentAs("userstore", UserStore.class);
-                return redirectTo( verifyResponse(request, response, userstore) );
-            } catch (Exception e) {
-                return renderError( e.getMessage() );
-            }
-        }
-
-        private Response redirectTo(String path) {
-            URI uri;
-            try {
-                uri = new URI(path);
-                return Response.seeOther(uri).build();
-            } catch (URISyntaxException e) {
-                throw new EpiException(e);
-            }
-        }
-
-        // Some means to report login errors, this assumes AppBase velocity rendering using a generic error.vm template
-        private Response renderError(String message) {
-            VelocityRender velocity =  AppConfig.getApp().getComponentAs("velocity", VelocityRender.class);
-            StreamingOutput out =  velocity.render("error.vm", uriInfo.getPath(), context, uriInfo.getQueryParameters(), "message", message);
-            return Response.status(Status.BAD_REQUEST).entity(out).build();
+    // Internal endpoint use in the OpenID handshake
+    @Path("/response")
+    @GET
+    public Response openIDResponse(@Context HttpServletRequest request, 
+                                   @Context HttpServletResponse response) {
+        try {
+            UserStore userstore = AppConfig.getApp()
+                                           .getComponentAs("userstore", UserStore.class);
+            return redirectTo( verifyResponse(request, response, userstore) );
+        } catch (Exception e) {
+            return renderError( e.getMessage() );
         }
     }
+
+    private Response redirectTo(String path) {
+        URI uri;
+        try {
+            uri = new URI(path);
+            return Response.seeOther(uri).build();
+        } catch (URISyntaxException e) {
+            throw new EpiException(e);
+        }
+    }
+
+    // Some means to report login errors, this assumes AppBase velocity rendering using a generic error.vm template
+    private Response renderError(String message) {
+        VelocityRender velocity =  AppConfig.getApp()
+                                            .getComponentAs("velocity", VelocityRender.class);
+        StreamingOutput out =  velocity.render("error.vm", 
+                                               uriInfo.getPath(), 
+                                               context, 
+                                               uriInfo.getQueryParameters(), 
+                                               "message", message);
+        return Response.status(Status.BAD_REQUEST).entity(out).build();
+    }
+}
 ```
 
 ## Other
