@@ -261,7 +261,8 @@ The `Login` class provides a set of convenience methods to enable user registrat
 and login via OpenID, login via password credentials and logout.
 
 To use this you need to provide a set of URL endpoints which invoke the various actions
-and handle OpenID response processing. The easy way to do this via Jersey. For example:
+and handle OpenID response processing. The easy way to do this is via
+[Jersey](https://jersey.java.net/index.html). For example:
 
 ```java
 @Path("/system/security")
