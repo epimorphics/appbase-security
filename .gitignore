@@ -8,3 +8,9 @@ generated
 /modal.log
 /work
 /derby.log
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
