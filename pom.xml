@@ -46,7 +46,7 @@
       </snapshots>
       <id>epi-public-repo</id>
       <name>Epimorphics Public Repository</name>
-      <url>http://repository.epimorphics.com</url>
+      <url>https://repository.epimorphics.com</url>
     </repository>
     
   </repositories>
