@@ -8,6 +8,12 @@ appbase-security
    * Permissions structure is based on Shiro Wildcard permissions but assumes a simplified pattern of `"{action}:{location}"`. Permissions can be retrieved by location as well as by user.
    * Provides packaged access to an [OpenID](http://openid.net/) implementation so it's easy to create applications where you can register and login using OpenID such as Google.
 
+## Change log:
+
+**3.0.3**
+   * Update shiro to 1.13.0 to avoid most severe CVEs. Move to Shiro2.x would be breaking and there's no migration documentation.
+   * Update appbase dependency to pull in update to tomcat 9.0
+
 ## Usage
 
 We can use any Shiro configuration method and register an instance of `AppBaseRealm` with an associated `UserStore`.
