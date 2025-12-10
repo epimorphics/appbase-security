@@ -9,24 +9,26 @@
 
 package com.epimorphics.appbase.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.env.BasicIniEnvironment;
+import org.apache.shiro.env.Environment;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Factory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestRealm {
     
     @Test
     public void testRealmControls() {
         // Set up Shiro from ini file
-        Factory<SecurityManager> factory = new IniSecurityManagerFactory("file:test/shiro.ini");
-        SecurityManager securityManager = factory.getInstance();
+        Environment env = new BasicIniEnvironment("file:test/shiro.ini");
+        SecurityManager securityManager = env.getSecurityManager();
+//        Factory<SecurityManager> factory = new IniSecurityManagerFactory("file:test/shiro.ini");
+//        SecurityManager securityManager = factory.getInstance();
         SecurityUtils.setSecurityManager(securityManager);
         AppRealm realm = AppRealm.getRealm();
 

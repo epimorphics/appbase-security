@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.jena.riot.system.stream.StreamManager;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +72,7 @@ public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
 
     protected boolean initstore() {
         try {
-            Class.forName(driver).newInstance();
-
+            Class.forName(driver).getDeclaredConstructor().newInstance();
             conn = DriverManager.getConnection(protocol + dbfile + ";create=true");
             
             ResultSet tables = conn.getMetaData().getTables(null, null, null, new String[]{"TABLE"});
