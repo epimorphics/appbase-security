@@ -12,10 +12,10 @@ package com.epimorphics.appbase.security;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -191,7 +191,6 @@ public class ProcessOpenID {
                     String provider = (String)session.getAttribute(SA_OPENID_PROVIDER);
                     if (provider != null && !provider.isEmpty()) {
                         Cookie cookie = new Cookie(PROVIDER_COOKIE, provider);
-                        cookie.setComment("Records the openid provider you last used to log in to an appbase application");
                         cookie.setMaxAge(60 * 60 * 24 * 30);
                         cookie.setHttpOnly(true);
                         cookie.setPath("/");
