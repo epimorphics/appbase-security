@@ -49,7 +49,19 @@
       <name>Epimorphics Public Repository</name>
       <url>https://repository.epimorphics.com</url>
     </repository>
-    
+
+    <repository>
+     <id>ukgovld-s3-release</id>
+     <name>UKGovLD release repository</name>
+     <url>https://ukgovld.s3.eu-west-1.amazonaws.com/release</url>
+     <releases>
+       <enabled>true</enabled>
+     </releases>
+     <snapshots>
+       <enabled>false</enabled>
+     </snapshots>
+    </repository>
+
   </repositories>
 
   <dependencies>
@@ -87,7 +99,7 @@
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.14.2.0</version>
+      <version>10.14.3.0</version>
     </dependency>
 
     <dependency>
