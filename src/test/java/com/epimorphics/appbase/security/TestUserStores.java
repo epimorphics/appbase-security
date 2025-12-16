@@ -9,14 +9,14 @@
 
 package com.epimorphics.appbase.security;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
 import org.apache.shiro.util.ByteSource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.epimorphics.appbase.security.BaseUserStore.UserRecord;
 
