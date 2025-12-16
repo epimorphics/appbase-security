@@ -3,7 +3,7 @@
   <groupId>com.epimorphics</groupId>
   <artifactId>appbase-security</artifactId>
   <packaging>jar</packaging>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.0.1-SNAPSHOT</version>
   <name>Appbase security</name>
 
   <scm>
