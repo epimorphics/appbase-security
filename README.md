@@ -11,10 +11,10 @@ appbase-security
 ## Change log:
 
 **4.0.0**
-    * Move from Java 11 to 21
-    * Update appbase dependency to 4.0.0
-    * Update derby 10.14 -> 10.17
-    * Move from javax.servlet -> jakarta.servlet 6.0
+   * Move from Java 11 to 21
+   * Update appbase dependency to 4.0.0
+   * Update derby 10.14 -> 10.17
+   * Move from javax.servlet -> jakarta.servlet 6.0
 
 **3.0.3**
    * Update shiro to 1.13.0 to avoid most severe CVEs. Move to Shiro2.x would be breaking and there's no migration documentation.
