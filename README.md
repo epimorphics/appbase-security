@@ -10,6 +10,12 @@ appbase-security
 
 ## Change log:
 
+**4.0.0**
+    * Move from Java 11 to 21
+    * Update appbase dependency to 4.0.0
+    * Update derby 10.14 -> 10.17
+    * Move from javax.servlet -> jakarta.servlet 6.0
+
 **3.0.3**
    * Update shiro to 1.13.0 to avoid most severe CVEs. Move to Shiro2.x would be breaking and there's no migration documentation.
    * Update appbase dependency to pull in update to tomcat 9.0
@@ -371,4 +377,3 @@ public class LoginCmds {
 The `UserStore` implementation also provides various methods for accessing available
 permissions and users and for creating time-limited password credentials.
 See the source code for details.
-
