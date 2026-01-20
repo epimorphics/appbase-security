@@ -31,11 +31,11 @@ import java.util.regex.Pattern;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.codec.Hex;
+import org.apache.shiro.lang.codec.Hex;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.HashRequest;
-import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.lang.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -305,6 +305,7 @@ class UserRecord {
         HashRequest request = new HashRequest.Builder()
             .setSource(password)
             .setSalt( getSalt() )
+            .addParameter("SimpleHash.iterations", realm.getHashIterations())
             .build();
         Hash hash = realm.getHashService().computeHash(request);
         this.password = hash.toHex();

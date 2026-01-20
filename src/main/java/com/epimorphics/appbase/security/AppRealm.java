@@ -18,6 +18,8 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
@@ -52,8 +54,8 @@ public class AppRealm extends AuthorizingRealm {
     public AppRealm() {
         setCredentialsMatcher( new AppRealmCredentialsMatcher() );
         DefaultHashService hashing = new DefaultHashService();
-        hashing.setHashAlgorithmName( DEFAULT_ALGORITHM );
-        hashing.setHashIterations( DEFAULT_ITERATIONS );
+        hashing.setDefaultAlgorithmName( DEFAULT_ALGORITHM );
+        // hashing.setHashIterations( DEFAULT_ITERATIONS );
         hashService = hashing;
     }
 
@@ -62,8 +64,19 @@ public class AppRealm extends AuthorizingRealm {
      * Must be set before any new credentials (including bootstrap ones) are hashed.
      */
     public void setHashIterations(int iterations) {
-        ((DefaultHashService) hashService).setHashIterations(iterations);
-        ((AppRealmCredentialsMatcher)getCredentialsMatcher()).setHashIterations(iterations);
+        CredentialsMatcher cm = getCredentialsMatcher();
+        if (cm instanceof HashedCredentialsMatcher hcm) {
+            hcm.setHashIterations(iterations);
+        }
+    }
+
+    public int getHashIterations() {
+        CredentialsMatcher cm = getCredentialsMatcher();
+        if (cm instanceof HashedCredentialsMatcher hcm) {
+            return hcm.getHashIterations();
+        } else {
+            return 0;
+        }
     }
 
     /**

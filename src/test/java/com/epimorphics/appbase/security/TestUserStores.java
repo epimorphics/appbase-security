@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
-import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.lang.util.ByteSource;
 import org.junit.jupiter.api.Test;
 
 import com.epimorphics.appbase.security.BaseUserStore.UserRecord;

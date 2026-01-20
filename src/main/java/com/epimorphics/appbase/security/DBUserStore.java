@@ -33,8 +33,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.jena.atlas.web.TypedInputStream;
 import org.apache.jena.riot.system.stream.StreamManager;
-import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.lang.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,8 +82,10 @@ public class DBUserStore extends BaseUserStore implements UserStore, Shutdown {
 
             if (!exists) {
                 startTransaction();
-                String schema  = FileManager.get().readWholeFileAsUTF8(DATABASE_SCHEMA);
-                Statement s = conn.createStatement();
+                String schema;
+                try (TypedInputStream input = StreamManager.get().open(DATABASE_SCHEMA)) {
+                    schema = new String(input.readAllBytes());
+                }                Statement s = conn.createStatement();
                 for (String statement : schema.split(";")) {
                     String sql = statement.trim();
                     if (!sql.isEmpty() && ! sql.startsWith("--")) {
