@@ -50,6 +50,30 @@
     </repository>
 
     <repository>
+      <id>epi-public-s3-release</id>
+      <name>Epimorphics S3 release repository</name>
+      <url>https://epi-repository.s3-eu-west-1.amazonaws.com/release</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>epi-public-s3-snapshot</id>
+      <name>Epimorphics S3 snapshot repository</name>
+      <url>https://epi-repository.s3-eu-west-1.amazonaws.com/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
      <id>ukgovld-s3-release</id>
      <name>UKGovLD release repository</name>
      <url>https://ukgovld.s3.eu-west-1.amazonaws.com/release</url>
