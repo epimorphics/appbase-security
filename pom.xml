@@ -13,7 +13,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <shiro.version>2.1.0</shiro.version>
+      <shiro.version>2.1.0</shiro.version>
+      <appbase.version>4.0.1</appbase.version>
+      <logback.version>1.5.32</logback.version>
   </properties>
 
   <repositories>
@@ -91,7 +93,7 @@
     <dependency>
       <groupId>com.epimorphics</groupId>
       <artifactId>appbase</artifactId>
-      <version>4.0.0</version>
+      <version>${appbase.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openid4java</groupId>
@@ -150,7 +152,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.5.21</version>
+      <version>${logback.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
