@@ -3,12 +3,12 @@
   <groupId>com.epimorphics</groupId>
   <artifactId>appbase-security</artifactId>
   <packaging>jar</packaging>
-  <version>4.1.3-SNAPSHOT</version>
+  <version>4.1.3</version>
   <name>Appbase security</name>
 
   <scm>
     <developerConnection>scm:git:git@github.com:epimorphics/appbase-security.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>appbase-security-4.1.3</tag>
   </scm>
 
   <properties>
