@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [5.0.0] - 2026-04-29
+
 ### Removed
 
 * Removed support for authentication via the now deprecated OpenID 1.0 / OpenID 2.0 protocols.
