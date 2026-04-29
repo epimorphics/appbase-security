@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.epimorphics.util.EpiException;
 
 /**
- * Utility functions for registration and login via OpenID.
+ * Utility functions for registration and login.
  * Binding these to resource URIs via jersey in the web application.
  * 
  * @author <a href="mailto:dave@epimorphics.com">Dave Reynolds</a>

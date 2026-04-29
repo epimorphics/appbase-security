@@ -6,19 +6,10 @@ appbase-security
    * Provides a `UserStore` for holding registered users and associated permissions, optionally including password credentials. Includes a database-backed store based on embedded [Derby](https://db.apache.org/derby/) and a memory based implementation which is loaded from a configuration file.
    * Provides a Realm implementation which has an associated `UserStore` and allows authentication tokens which are externally validated.
    * Permissions structure is based on Shiro Wildcard permissions but assumes a simplified pattern of `"{action}:{location}"`. Permissions can be retrieved by location as well as by user.
-   * Provides packaged access to an [OpenID](http://openid.net/) implementation so it's easy to create applications where you can register and login using OpenID such as Google.
 
 ## Change log:
 
-**4.0.0**
-   * Move from Java 11 to 21
-   * Update appbase dependency to 4.0.0
-   * Update derby 10.14 -> 10.17
-   * Move from javax.servlet -> jakarta.servlet 6.0
-
-**3.0.3**
-   * Update shiro to 1.13.0 to avoid most severe CVEs. Move to Shiro2.x would be breaking and there's no migration documentation.
-   * Update appbase dependency to pull in update to tomcat 9.0
+See the separate [CHANGELOG.md](CHANGELOG.md).
 
 ## Usage
 
@@ -157,18 +148,10 @@ user  id  "name"   password
 For example:
 
 ```INI
-user https://profiles.google.com/1147194443288764760228 "Alice"
 user dave@epimorphics.com "Dave Reynolds" shouldbechanged
 ```
 
-An OpenID profile for anyone with a Google account can be obtained from their profile or
-Google-plus home page and copying the long number from there into the above URL pattern.
-A general Google login generates an OpenID which depends on the requesting web site
-as well as the user. To determine the ID in that case start the bootstrap registry,
-register the target user and note the resulting OpenID, then shutdown the registry
-and modify the initialization file accordingly.
-
-There is a built-in anonymous user with pseudo OpenID of `http://localhost/anon`.
+There is a built-in anonymous user with pseudo id of `http://localhost/anon`.
 It is convenient to declare that user in the initialization file as well, so as to bind a
 visible name to that id. For example:
 
@@ -263,111 +246,6 @@ public class SecurityViolationMapper  implements
             log.error("Internal error reporting security violation", e);
             return null;
         }
-    }
-}
-```
-
-## OpenID, login and registration
-
-The `Login` class provides a set of convenience methods to enable user registration
-and login via OpenID, login via password credentials and logout.
-
-To use this you need to provide a set of URL endpoints which invoke the various actions
-and handle OpenID response processing. The easy way to do this is via
-[Jersey](https://jersey.java.net/index.html). For example:
-
-```java
-@Path("/system/security")
-public class LoginCmds {
-    protected @Context UriInfo uriInfo;
-    protected @Context ServletContext context;
-
-    // request OpenID login for a registered user
-    @Path("/login")
-    @POST
-    public Response login(
-            @FormParam("provider") String provider,
-            @FormParam("return") String returnURL,
-            @Context HttpServletRequest request,
-            @Context HttpServletResponse response) {
-        OpenidRequest oid = new OpenidRequest(uriInfo.getBaseUri().toString() + 
-                                              "system/security/response");
-        oid.setProvider(provider);
-        oid.setReturnURL(returnURL);
-        try {
-            processOpenID(request, response, oid);
-        }  catch (Exception e) {
-            throw new WebApiException(Status.BAD_REQUEST, 
-                                      "Login/registration action failed: " + e);
-        }
-        return Response.ok().build();
-    }
-
-    // Register a new user via OpenID
-    @Path("/register")
-    @POST
-    public Response register(
-            @FormParam("provider") String provider,
-            @FormParam("return") String returnURL,
-            @Context HttpServletRequest request,
-            @Context HttpServletResponse response) {
-        OpenidRequest oid = new OpenidRequest(uriInfo.getBaseUri().toString() + 
-                                              "system/security/response");
-        oid.setProvider(provider);
-        oid.setReturnURL(returnURL);
-        oid.setRegister(true);
-        try {
-            processOpenID(request, response, oid);
-        }  catch (Exception e) {
-            throw new WebApiException(Status.BAD_REQUEST, 
-                                      "Login/registration action failed: " + e);
-        }
-        return Response.ok().build();
-    }
-
-    // Logout the current loged in user
-    @Path("/logout")
-    @POST
-    public void doLogout(@Context HttpServletRequest request, 
-                         @Context HttpServletResponse response) throws IOException {
-        logout(request);
-        response.sendRedirect(request.getServletContext().getContextPath());
-    }
-
-    // Internal endpoint use in the OpenID handshake
-    @Path("/response")
-    @GET
-    public Response openIDResponse(@Context HttpServletRequest request, 
-                                   @Context HttpServletResponse response) {
-        try {
-            UserStore userstore = AppConfig.getApp()
-                                           .getComponentAs("userstore", UserStore.class);
-            return redirectTo( verifyResponse(request, response, userstore) );
-        } catch (Exception e) {
-            return renderError( e.getMessage() );
-        }
-    }
-
-    private Response redirectTo(String path) {
-        URI uri;
-        try {
-            uri = new URI(path);
-            return Response.seeOther(uri).build();
-        } catch (URISyntaxException e) {
-            throw new EpiException(e);
-        }
-    }
-
-    // Some means to report login errors, this assumes AppBase velocity rendering using a generic error.vm template
-    private Response renderError(String message) {
-        VelocityRender velocity =  AppConfig.getApp()
-                                            .getComponentAs("velocity", VelocityRender.class);
-        StreamingOutput out =  velocity.render("error.vm", 
-                                               uriInfo.getPath(), 
-                                               context, 
-                                               uriInfo.getQueryParameters(), 
-                                               "message", message);
-        return Response.status(Status.BAD_REQUEST).entity(out).build();
     }
 }
 ```
