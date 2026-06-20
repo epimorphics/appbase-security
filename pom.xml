@@ -13,7 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <shiro.version>2.1.0</shiro.version>
+      <shiro.version>2.2.1</shiro.version>
       <appbase.version>4.0.4</appbase.version>
       <logback.version>1.5.32</logback.version>
   </properties>
