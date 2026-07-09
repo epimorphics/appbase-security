@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [5.0.3] - 2026-07-09
+
+### Security
+
 * Update shiro-core to 2.2.1
+* Update logback to 1.5.37
+* Update appbase to 4.0.6 for transitive jackson-databind
 
 ## [5.0.2] - 2026-05-19
 
