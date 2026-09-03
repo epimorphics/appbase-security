@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+Update appbase to address transitive vulnerabilities.
+
 ## [5.0.4] - 2026-08-19
 
 * Update lib/appbase to in httpcomponents version updates
