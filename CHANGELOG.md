@@ -5,6 +5,11 @@ All notable changes to this project from 2026-04-27 onward will be documented in
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+* Update appbase to 4.0.12 to address transitive vulnerabilities
+* Removed local declaration of org.bouncycastle:bcprov-jdk18on dependency as this is managed in the upstream appbase dependency.
+
 ## [5.0.7] - 2026-11-04
 
 * Update appbase to 4.0.11 to address transitive vulnerabilities.
