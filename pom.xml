@@ -14,7 +14,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <shiro.version>2.2.1</shiro.version>
-      <appbase.version>4.0.11</appbase.version>
+      <appbase.version>4.0.12</appbase.version>
       <logback.version>1.6.6</logback.version>
   </properties>
 
@@ -107,11 +107,6 @@
           <artifactId>bcprov-jdk18on</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk18on</artifactId>
-      <version>1.86</version>
     </dependency>
     <dependency>
       <groupId>org.apache.shiro</groupId>
